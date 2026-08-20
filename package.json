@@ -1,0 +1,35 @@
+{
+  "name": "@lilyco-42/letsgal-ai",
+  "version": "0.1.0",
+  "description": "AI-assisted creation toolkit for LetsGal Studio — story DSL compiler, project generator, block builders, CLI & MCP server. Zero runtime dependencies.",
+  "type": "module",
+  "bin": {
+    "letsgal-ai": "bin/letsgal-ai.js"
+  },
+  "exports": {
+    ".": "./lib/index.js"
+  },
+  "files": [
+    "bin",
+    "lib",
+    "docs",
+    "examples"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "test": "node test/smoke.js",
+    "demo": "node bin/letsgal-ai.js build examples/example.dsl -o /tmp/letsgal-demo"
+  },
+  "keywords": [
+    "letsgal",
+    "visual-novel",
+    "galgame",
+    "ai",
+    "mcp",
+    "cli",
+    "story-compiler"
+  ],
+  "license": "MIT"
+}
