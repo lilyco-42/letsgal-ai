@@ -1,0 +1,20 @@
+name: ci
+
+# 最小 CI：只跑组织级架构守则（deps pin + 大文件），不编不跑 ——
+# 编译/测试由各仓库按需自行加 job。
+on:
+  push:
+    branches: [main, master]
+    tags: ["v*"]
+  pull_request:
+  workflow_dispatch:
+
+# 同一 ref 只保留最新一次运行
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ !startsWith(github.ref, 'refs/tags/') }}
+
+jobs:
+  hygiene:
+    name: hygiene (架构守则)
+    uses: lilyco-42/.github/.github/workflows/lyco-hygiene.yml@main
