@@ -1,0 +1,3 @@
+desktop/ui/src/components/ui/*.tsx text eol=lf
+desktop/ui/src/shadcn-sources.json text eol=lf
+desktop/ui/src/components/ui/LICENSE.md text eol=lf
