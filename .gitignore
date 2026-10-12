@@ -1,3 +1,11 @@
 node_modules/
-*.tgz
-/tmp/
+desktop/bin/
+desktop/frontend/
+desktop/dist/
+desktop/build/
+desktop/evidence/
+desktop/*.spec
+desktop/THIRD-PARTY-NOTICES.json
+desktop/engine-LICENSE
+__pycache__/
+*.pyc

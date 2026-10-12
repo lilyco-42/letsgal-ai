@@ -16,6 +16,16 @@ LetsGal Studio 是**桌面 GUI 编辑器**（无 MCP、无 CLI），但它的一
 
 ## 快速开始
 
+## 桌面剧情工坊（构建验收中）
+
+`desktop/` 为原 CLI 添加 shadcn 工作台、本机 FastAPI 和 Windows WebView2。
+支持编辑剧本、导入自有背景、预览真实编译的对白/分支、导出 LetsGal 工程 ZIP。
+不附官方引擎或模板素材，工程 ZIP 不等于独立游戏安装包。
+所有构建、测试和安装验收只在 GitHub Actions。正式发布前不把 PR 产物称为稳定安装包。
+详细说明：[desktop/README.md](desktop/README.md)。
+
+## CLI 快速开始
+
 ```bash
 # 安装（无需依赖，直接 clone 或 npm link）
 npm link                    # 或 node bin/letsgal-ai.js …

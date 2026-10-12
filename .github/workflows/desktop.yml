@@ -1,0 +1,97 @@
+name: Story Desktop
+on:
+  pull_request:
+    paths: ['desktop/**','bin/**','lib/**','test/**','package.json','LICENSE','.gitattributes','.github/workflows/desktop.yml']
+  push:
+    branches: [main]
+    paths: ['desktop/**','bin/**','lib/**','test/**','package.json','LICENSE','.gitattributes','.github/workflows/desktop.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: story-desktop-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.18.0'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Original CLI and fragment identity regression
+        run: |
+          npm install --package-lock=false --no-audit --no-fund
+          npm test
+          node test/fragment-identity.js
+          node desktop/packaging/build-engine.mjs
+      - name: Build actual shadcn workspace
+        working-directory: desktop/ui
+        run: |
+          npm ci --no-audit --no-fund
+          npm run build
+      - name: App and verification dependencies
+        run: python -m pip install -r desktop/requirements.txt httpx==0.28.1 pyinstaller==6.16.0
+      - name: Actual CLI input, output, cancellation and local-only boundaries
+        working-directory: desktop
+        run: python -m unittest discover -s tests -p 'test_*.py' -v
+      - name: Actual browser desktop, tablet and mobile
+        if: runner.os == 'Linux'
+        working-directory: desktop
+        shell: bash
+        run: |
+          npm install --no-save --package-lock=false playwright@1.56.1
+          npx playwright install --with-deps chromium
+          python -m uvicorn studio.app:create_app --factory --host 127.0.0.1 --port 8043 > /tmp/story-ui.log 2>&1 &
+          PID=$!
+          trap 'kill "$PID" || true' EXIT
+          for i in $(seq 1 40); do curl -fsS http://127.0.0.1:8043/ >/dev/null && break || sleep .25; done
+          node tests/ui.mjs
+      - name: Freeze app, actual notices, packaged CLI and ZIP
+        working-directory: desktop
+        run: |
+          python packaging/build-app.py
+          python tests/notices.py
+          python tests/bundle_smoke.py dist/Lain42-Story-Studio/Lain42-Story-Studio${{ runner.os == 'Windows' && '.exe' || '' }}
+          python packaging/archive.py
+      - name: Windows native runtime and installer tools
+        if: runner.os == 'Windows'
+        working-directory: desktop
+        shell: pwsh
+        run: |
+          npm install --no-save --package-lock=false playwright@1.56.1
+          choco install nsis -y --no-progress
+          Invoke-WebRequest 'https://go.microsoft.com/fwlink/p/?LinkId=2124703' -OutFile webview2-bootstrap.exe
+          $signature = Get-AuthenticodeSignature webview2-bootstrap.exe
+          if ($signature.Status -ne 'Valid' -or $signature.SignerCertificate.Subject -notmatch 'Microsoft Corporation') { throw 'Invalid WebView2 bootstrap signature' }
+          $setup = Start-Process ./webview2-bootstrap.exe -ArgumentList '/silent','/install' -Wait -PassThru -WindowStyle Hidden
+          if ($setup.ExitCode -notin 0,3010) { throw "WebView2 install failed: $($setup.ExitCode)" }
+      - name: Native WebView2, normal close, actual install and safe uninstall
+        if: runner.os == 'Windows'
+        working-directory: desktop
+        run: |
+          node tests/desktop_smoke.mjs dist/Lain42-Story-Studio/Lain42-Story-Studio.exe
+          python packaging/windows-installer.py
+          python tests/installer_smoke.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: story-evidence-${{ runner.os }}-${{ github.sha }}
+          path: desktop/evidence/
+          if-no-files-found: warn
+      - uses: actions/upload-artifact@v4
+        with:
+          name: lain42-story-studio-${{ runner.os }}-${{ github.sha }}
+          if-no-files-found: error
+          path: |
+            desktop/dist/*.zip
+            desktop/dist/*.sha256
+            desktop/dist/*-setup.exe
