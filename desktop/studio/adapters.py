@@ -50,7 +50,7 @@ class StoryAdapter:
             raise ValueError('编译引擎缺失，请下载完整桌面包')
         validate_script(request.script)
         script = root/'story.dsl'
-        script.write_text(request.script, encoding='utf-8')
+        script.write_bytes(request.script.encode('utf-8'))
         return [binary, 'build', str(script), '-o', str(out/'project'), '--name', request.title]
 
     def result(self, stdout):
