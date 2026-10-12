@@ -51,6 +51,7 @@ if os.name == 'nt':
     notices.append({'ecosystem': 'Bundled native SDK', 'name': pin['name'],
                     'version': pin['version'], 'license': 'BSD-3-Clause', 'source': pin['source'],
                     'verified_files': pin['files'], 'notices': {'LICENSE.txt': license_bytes.decode('utf-8')}})
+    Path('evidence').mkdir(exist_ok=True)
     Path('evidence/webview2-sdk.json').write_text(json.dumps({
         'commit': os.environ['GITHUB_SHA'], 'version': pin['version'],
         'package_sha256': pin['package_sha256'], 'license_sha256': pin['license_sha256'],
