@@ -31,6 +31,6 @@
     "cli",
     "story-compiler"
   ],
-  "license": "MIT"
-  ,"devDependencies": {"esbuild": "0.25.12", "postject": "1.0.0-alpha.6"}
+  "license": "MIT",
+  "devDependencies": {"esbuild": "0.25.12", "postject": "1.0.0-alpha.6"}
 }

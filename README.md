@@ -14,8 +14,6 @@ LetsGal Studio 是**桌面 GUI 编辑器**（无 MCP、无 CLI），但它的一
 - 格式完全对齐官方（project.json / characters.json / scenes.json / chapters/*.json / assets/.manifest.json），
   Studio 打开零报错，自动修复合入角色表情、替换素材都自然
 
-## 快速开始
-
 ## 桌面剧情工坊（构建验收中）
 
 `desktop/` 为原 CLI 添加 shadcn 工作台、本机 FastAPI 和 Windows WebView2。

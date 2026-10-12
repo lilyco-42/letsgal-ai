@@ -1,4 +1,6 @@
 node_modules/
+*.tgz
+/tmp/
 desktop/bin/
 desktop/frontend/
 desktop/dist/
