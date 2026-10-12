@@ -14,12 +14,13 @@ LetsGal Studio 是**桌面 GUI 编辑器**（无 MCP、无 CLI），但它的一
 - 格式完全对齐官方（project.json / characters.json / scenes.json / chapters/*.json / assets/.manifest.json），
   Studio 打开零报错，自动修复合入角色表情、替换素材都自然
 
-## 桌面剧情工坊（构建验收中）
+## 桌面剧情工坊
 
 `desktop/` 为原 CLI 添加 shadcn 工作台、本机 FastAPI 和 Windows WebView2。
 支持编辑剧本、导入自有背景、预览真实编译的对白/分支、导出 LetsGal 工程 ZIP。
 不附官方引擎或模板素材，工程 ZIP 不等于独立游戏安装包。
-所有构建、测试和安装验收只在 GitHub Actions。正式发布前不把 PR 产物称为稳定安装包。
+所有构建、测试和安装验收只在 GitHub Actions。[v0.1.0 正式下载](https://github.com/lilyco-42/letsgal-ai/releases/tag/story-studio-v0.1.0-f410c1226c43)：Windows 安装 EXE / 完整 ZIP、Linux ZIP 与 SHA256。
+正式主线[验收记录](https://github.com/lilyco-42/letsgal-ai/actions/runs/38213366891)覆盖原 CLI、真实背景分支、原生 WebView2、正常退出清理、实际安装运行与卸载保留用户文件。Windows 安装器未签名，需要 WebView2。
 详细说明：[desktop/README.md](desktop/README.md)。
 
 ## CLI 快速开始
