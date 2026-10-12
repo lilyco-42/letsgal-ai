@@ -10,6 +10,8 @@ try{
   const errors=[];page.on('pageerror',e=>errors.push(e.message));
   await page.goto('http://127.0.0.1:8043');
   await page.locator('#status').filter({hasText:'本机引擎就绪'}).waitFor();
+  await page.locator('#assetFile').setInputFiles('tests/station.png');
+  await page.getByRole('listitem').filter({hasText:'backgrounds/station.png'}).waitFor();
   await page.locator('#compile').click();
   await page.locator('#status').filter({hasText:'编译完成'}).waitFor();
   await page.getByRole('button',{name:'继续',exact:true}).click();
@@ -18,6 +20,7 @@ try{
   await page.getByRole('button',{name:'继续',exact:true}).click();
   await page.getByRole('button',{name:'一起出发',exact:true}).click();
   assert.match(await page.locator('#previewText').innerText(),/第一班列车/);
+  await page.waitForFunction(()=>document.querySelector('#preview img')?.naturalWidth===180);
   const result=await page.evaluate(async()=>{const response=await fetch(document.querySelector('#downloadZip').getAttribute('href'));const bytes=new Uint8Array(await response.arrayBuffer());return {status:response.status,size:bytes.length,zip:bytes[0]===80&&bytes[1]===75}});
   assert.equal(result.status,200);assert(result.zip&&result.size>1000);
   assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));

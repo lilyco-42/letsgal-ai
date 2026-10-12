@@ -9,5 +9,6 @@ desktop/evidence/
 desktop/*.spec
 desktop/THIRD-PARTY-NOTICES.json
 desktop/engine-LICENSE
+desktop/tests/station.png
 __pycache__/
 *.pyc

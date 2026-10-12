@@ -21,14 +21,15 @@ function StoryPreview({job}:{job:Job}){
  const result=job.result!;
  const [chapter,setChapter]=useState(0),[fragment,setFragment]=useState(0),[cursor,setCursor]=useState(0);
  const [history,setHistory]=useState<[number,number,number][]>([]);
+ const [background,setBackground]=useState<Block|null>(null);
  const frames=result.chapters[chapter]?.fragments[fragment]?.blocks||[];
  const block=frames[cursor];
  const text=block?.content?.map(x=>x.text).join('')||'';
- const scene=[...frames.slice(0,cursor+1)].reverse().find(x=>x.type==='scene');
+ const scene=[...frames.slice(0,cursor+1)].reverse().find(x=>x.type==='scene')||background;
  const asset=String(scene?.props?.uri||'');
  const options=block?.type==='branch'?JSON.parse(String(block.props?.optionsJson||'[]')) as {text:string;fragmentId:string}[]:[];
  const target=(id:string)=>{for(let c=0;c<result.chapters.length;c++)for(let f=0;f<result.chapters[c].fragments.length;f++)if(result.chapters[c].fragments[f].id===id)return [c,f] as const;return null};
- const jump=(id:string,call=false)=>{const t=target(id);if(t){if(call)setHistory(h=>[...h,[chapter,fragment,cursor+1]]);setChapter(t[0]);setFragment(t[1]);setCursor(0)}};
+ const jump=(id:string,call=false)=>{const t=target(id);if(t){setBackground(scene||null);if(call)setHistory(h=>[...h,[chapter,fragment,cursor+1]]);setChapter(t[0]);setFragment(t[1]);setCursor(0)}};
  function next(){
   if(block?.type==='branch')return;
   if(block?.type==='callFragment'){jump(String(block.props?.fragmentId),true);return}
@@ -38,7 +39,7 @@ function StoryPreview({job}:{job:Job}){
   if(fragment===0&&chapter+1<result.chapters.length){setChapter(chapter+1);setFragment(0);setCursor(0);return}
   setCursor(frames.length);
  }
- const reset=()=>{setChapter(0);setFragment(0);setCursor(0);setHistory([])};
+ const reset=()=>{setChapter(0);setFragment(0);setCursor(0);setHistory([]);setBackground(null)};
  return <div className="space-y-4" id="preview">
   <div className="flex items-center justify-between gap-3"><div><p className="text-xs text-muted-foreground">真实编译成果 / 剧情预览</p><h2 className="text-xl font-medium">{result.title}</h2></div><Button variant="outline" size="sm" onClick={reset}><RotateCcw/>重播</Button></div>
   <div className="story-stage">
@@ -50,7 +51,7 @@ function StoryPreview({job}:{job:Job}){
     {options.length>0?<div className="grid gap-2 mt-5">{options.map((o,i)=><Button key={i} variant="outline" onClick={()=>jump(o.fragmentId)}>{o.text}</Button>)}</div>:block&&<Button className="mt-5" onClick={next} id="nextLine">继续<Play/></Button>}
    </div>
   </div>
-  <div className="flex flex-wrap gap-2">{result.chapters.map((c,i)=><Button key={c.id} variant={i===chapter?'secondary':'ghost'} size="sm" onClick={()=>{setChapter(i);setFragment(0);setCursor(0);setHistory([])}}>{c.name}</Button>)}</div>
+  <div className="flex flex-wrap gap-2">{result.chapters.map((c,i)=><Button key={c.id} variant={i===chapter?'secondary':'ghost'} size="sm" onClick={()=>{setChapter(i);setFragment(0);setCursor(0);setHistory([]);setBackground(null)}}>{c.name}</Button>)}</div>
   <p className="text-xs text-muted-foreground">预览对白、背景与分支，不是官方游戏引擎。完整演出请在 LetsGal Studio 核对。</p>
  </div>
 }
