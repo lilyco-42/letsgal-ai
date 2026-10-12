@@ -11,6 +11,9 @@ if os.environ.get('GITHUB_ACTIONS') != 'true':
 root=Path('dist/Lain42-Story-Studio')
 for source in [Path('../LICENSE'),Path('README.md'),Path('SOURCES.md'),Path('SHARED-SOURCE-LICENSE'),Path('THIRD-PARTY-NOTICES.json'),Path('engine-LICENSE')]:
     shutil.copyfile(source,root/source.name)
+if os.name == 'nt':
+    shutil.copyfile('MICROSOFT-WEBVIEW2-LICENSE.txt',root/'MICROSOFT-WEBVIEW2-LICENSE.txt')
+    shutil.copyfile('packaging/webview2-sdk.json',root/'webview2-sdk.json')
 shutil.copyfile('../package.json',root/'engine-package.json')
 shutil.copyfile('ui/package-lock.json',root/'UI-package-lock.json')
 manifest={'commit':os.environ['GITHUB_SHA'],'runner':os.environ['RUNNER_OS'],'engine':'letsgal-ai/bin/letsgal-ai.js','node_version':'22.18.0',

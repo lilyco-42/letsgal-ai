@@ -18,3 +18,8 @@ Windows WebView2 原生窗口；Linux 使用同一个本机浏览器工作台。
 
 CLI 编译器：本仓库 MIT。原 Node.js/Python/前端依赖许可随安装包提供。
 FastAPI/WebView 基础封装复用 lilyco-42/mirage-tank（MIT），见 SHARED-SOURCE-LICENSE。
+
+桌面封装 0.1.1 补齐 Windows 所带 Microsoft.Web.WebView2 SDK 1.0.3856.49 的独立 BSD-3-Clause 署名。
+`MICROSOFT-WEBVIEW2-LICENSE.txt` 保留官方完整文本，`webview2-sdk.json` 记录官方包和五个 SDK 文件的 SHA256；
+Actions 对照官方 NuGet 包核验安装依赖与最终冻结包中的文件，再将许可纳入便携 ZIP 和安装 EXE。
+SDK 与 WebView2 Runtime 是不同组件；本安装包不附带 Runtime，仍需 Microsoft 官方运行时。
