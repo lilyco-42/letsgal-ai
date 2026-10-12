@@ -21,3 +21,10 @@ https://github.com/renpy/renpy/issues/6291 (web media playback quirks)
 https://github.com/fracturedring/renpy-mcp (browser authoring plus MCP precedent)
 
 No official engine/template assets are redistributed. No new revenue is proven.
+
+Windows SDK attribution: Microsoft.Web.WebView2 1.0.3856.49,
+https://www.nuget.org/packages/Microsoft.Web.WebView2/1.0.3856.49 .
+The official NuGet LICENSE.txt is preserved separately from pywebview's BSD notice.
+packaging/webview2-sdk.json pins the official package, license, and all five bundled
+SDK file hashes; Actions checks both installed dependencies and the frozen output.
+Runtime deployment is separate: https://learn.microsoft.com/en-us/microsoft-edge/webview2/concepts/distribution .
