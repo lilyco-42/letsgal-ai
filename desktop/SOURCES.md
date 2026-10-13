@@ -28,3 +28,5 @@ The official NuGet LICENSE.txt is preserved separately from pywebview's BSD noti
 packaging/webview2-sdk.json pins the official package, license, and all five bundled
 SDK file hashes; Actions checks both installed dependencies and the frozen output.
 Runtime deployment is separate: https://learn.microsoft.com/en-us/microsoft-edge/webview2/concepts/distribution .
+
+Original Lyco application icon: lilyco-42/lyco-ip guidance 82f35f190129498f73ef7199075c3a1723adfe2d, retained resources/icon-source.json, PNG and separate IP notice. Packaging helper: original shared MIT source lilyco-42/lilyco 0f98b81f101ee962db12f2d600f8a8bba13ecdff apps/desktop-common/desktop_icons.py. Conversion and complete PE/native icon checks execute only in Actions; no design baseline images are redistributed.
